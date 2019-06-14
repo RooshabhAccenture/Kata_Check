@@ -43,3 +43,10 @@ class FamilyInfo constructor(strFamilyValue: String) {
         }
 }
 
+//Babysitter does not work in fractional hours;
+// Time is rounded up/down based on the 30 minute mark.
+fun roundTime(timeMinute: Int, timeHour: Int): Int{
+    var roundedHour: Int = timeHour
+    if ( timeMinute >= 30) { roundedHour = timeHour + 1 }
+    return roundedHour
+}
