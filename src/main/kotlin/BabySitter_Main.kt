@@ -45,8 +45,50 @@ class FamilyInfo constructor(strFamilyValue: String) {
 
 //Babysitter does not work in fractional hours;
 // Time is rounded up/down based on the 30 minute mark.
-fun roundTime(timeMinute: Int, timeHour: Int): Int{
+fun roundTime(timeMinute: Int, timeHour: Int): Int {
     var roundedHour: Int = timeHour
-    if ( timeMinute >= 30) { roundedHour = timeHour + 1 }
+    if (timeMinute >= 30) {
+        roundedHour = timeHour + 1
+    }
     return roundedHour
+}
+
+//Function to validate user input times
+fun validateTime(): CorrectedTime {
+
+    //**********REMOVE & move to input for function
+    val startTime = Time(8, 10, "pm")
+    val stopTime = Time(2, 33, "am")
+    //***********REMOVE % move to input for function
+
+
+    //Created a linkedMap with "indexing" to be used in the event Kotlin LinkedHashMap does not
+    //expose the list interface when attempting to iterate through it
+    val timeTranslationMap = mapOf(
+        "5pm" to 0, "6pm" to 1, "7pm" to 2, "8pm" to 3, "9pm" to 4,
+        "10pm" to 5, "11pm" to 6, "12am" to 7, "1am" to 8, "2am" to 9, "3am" to 10, "4am" to 11
+    )
+
+
+    //call function to round time
+    startTime.Hours = roundTime(startTime.minutes, startTime.Hours)
+    stopTime.Hours = roundTime(stopTime.minutes, stopTime.Hours)
+
+    //Validate start following rounding to
+    if (startTime.period == "am" || (startTime.Hours < 5 && startTime.period == "pm")) {
+        println("no bueno") //update to return valid message
+    }
+
+    //validate time is within resaoable time frame
+    if (stopTime.period == "am" && stopTime.Hours > 4) {
+        println("no bueno")
+    }
+
+
+    //return value blocks to be fixed
+    val startTimeStr = "the rounded start time string"
+    val stopTimeStr = "the rounded stop time string"
+    val filteredTimeMap = mapOf("?am/pm" to 0)
+
+    return CorrectedTime(startTimeStr, stopTimeStr, filteredTimeMap)
 }
