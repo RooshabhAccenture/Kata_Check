@@ -64,6 +64,7 @@ fun validateTime(): CorrectedTime {
 
     //Created a linkedMap with "indexing" to be used in the event Kotlin LinkedHashMap does not
     //expose the list interface when attempting to iterate through it
+    //The map is used to circumvent the use of an import of java datetime library
     val timeTranslationMap = mapOf(
         "5pm" to 0, "6pm" to 1, "7pm" to 2, "8pm" to 3, "9pm" to 4,
         "10pm" to 5, "11pm" to 6, "12am" to 7, "1am" to 8, "2am" to 9, "3am" to 10, "4am" to 11
@@ -85,10 +86,31 @@ fun validateTime(): CorrectedTime {
     }
 
 
-    //return value blocks to be fixed
-    val startTimeStr = "the rounded start time string"
-    val stopTimeStr = "the rounded stop time string"
-    val filteredTimeMap = mapOf("?am/pm" to 0)
+    //Get Key value to be searched in translation map
+    val startHours = startTime.Hours.toString()
+    val stopHours = stopTime.Hours.toString()
+    val startTimeStr = startHours + startTime.period
+    val stopTimeStr = stopHours + stopTime.period
+
+
+    val translatedStart = timeTranslationMap.getOrDefault(startTimeStr, 0)
+    print(translatedStart)
+
+    val translatedStop = timeTranslationMap.getOrDefault(stopTimeStr, 0)
+    println(translatedStop)
+
+    val translationDiff = translatedStop - translatedStart
+
+    //translation map used to confirm that the babysitter works for at least 30 minutes
+    //Allows babysitter to be on call (e.g. working from 3am - 4am)
+    if (translationDiff <= 0) {
+        //Throw exception etc wh
+        println("Invalid time entry")
+    }
+
+    //filtered translation map to be used in conjunction with the family pay rates per hour
+    val filteredTimeMap = timeTranslationMap.filterValues { it in translatedStart..translatedStop }
+
 
     return CorrectedTime(startTimeStr, stopTimeStr, filteredTimeMap)
 }
