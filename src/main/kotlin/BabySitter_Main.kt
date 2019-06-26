@@ -45,6 +45,7 @@ class FamilyInfo constructor(strFamilyValue: String) {
 
 //Babysitter does not work in fractional hours;
 // Time is rounded up/down based on the 30 minute mark.
+//To account for midnight transition, manual change of time to 1
 fun roundTime(timeMinute: Int, timeHour: Int): Int {
     var roundedHour: Int = timeHour
     if (timeMinute >= 30) {
@@ -123,10 +124,10 @@ fun validateTime(startTime: Time, stopTime: Time): CorrectedTime {
     return CorrectedTime(startTimeStr, stopTimeStr, filteredTimeMap)
 }
 
-//total pay is calcuated from the map values. A list is kep to allow additional changes in the future
+//total pay is calculated from the map values. A list is kep to allow additional changes in the future
+//The calculate pay function could be adjusted to pull in the indexes on the time map and iterate or
+//sum the the the values between the two indexes
 fun calculatePay(
-    validatedStartTimeStr: String,
-    validatedStopTimeStr: String,
     familyMap: Map<String, Int>,
     validatedMap: Map<String, Int>
 ): Int {
