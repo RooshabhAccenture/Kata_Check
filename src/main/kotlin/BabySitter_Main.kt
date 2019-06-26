@@ -48,18 +48,21 @@ class FamilyInfo constructor(strFamilyValue: String) {
 fun roundTime(timeMinute: Int, timeHour: Int): Int {
     var roundedHour: Int = timeHour
     if (timeMinute >= 30) {
-        roundedHour = timeHour + 1
+        when (roundedHour) {
+            in 1..11 -> roundedHour = timeHour + 1
+            12 -> roundedHour = 1
+        }
     }
     return roundedHour
 }
 
 //Function to validate user input times
-fun validateTime(): CorrectedTime {
+fun validateTime(startTime: Time, stopTime: Time): CorrectedTime {
 
-    //**********REMOVE & move to input for function
-    val startTime = Time(8, 10, "pm")
-    val stopTime = Time(2, 33, "am")
-    //***********REMOVE % move to input for function
+//    //**********REMOVE & move to input for function
+//    val startTime = Time(8, 10, "pm")
+//    val stopTime = Time(2, 33, "am")
+//    //***********REMOVE % move to input for function
 
 
     //Created a linkedMap with "indexing" to be used in the event Kotlin LinkedHashMap does not
@@ -70,10 +73,11 @@ fun validateTime(): CorrectedTime {
         "10pm" to 5, "11pm" to 6, "12am" to 7, "1am" to 8, "2am" to 9, "3am" to 10, "4am" to 11
     )
 
-
+    // println("stop time before round: ${stopTime.Hours}")
     //call function to round time
     startTime.Hours = roundTime(startTime.minutes, startTime.Hours)
     stopTime.Hours = roundTime(stopTime.minutes, stopTime.Hours)
+    // println("stop time after round: ${stopTime.Hours}")
 
     //Validate start following rounding to
     if (startTime.period == "am" || (startTime.Hours < 5 && startTime.period == "pm")) {
@@ -82,6 +86,7 @@ fun validateTime(): CorrectedTime {
 
     //validate time is within resaoable time frame
     if (stopTime.period == "am" && stopTime.Hours > 4) {
+        //println("${stopTime.Hours}")
         println("no bueno")
     }
 
@@ -92,12 +97,15 @@ fun validateTime(): CorrectedTime {
     val startTimeStr = startHours + startTime.period
     val stopTimeStr = stopHours + stopTime.period
 
-
+    //if start/stop exist
+    //do
     val translatedStart = timeTranslationMap.getOrDefault(startTimeStr, 0)
-    print(translatedStart)
+    //print(translatedStart)
 
     val translatedStop = timeTranslationMap.getOrDefault(stopTimeStr, 0)
-    println(translatedStop)
+    //println(translatedStop)
+
+    //else throw exception?
 
     val translationDiff = translatedStop - translatedStart
 
@@ -114,3 +122,24 @@ fun validateTime(): CorrectedTime {
 
     return CorrectedTime(startTimeStr, stopTimeStr, filteredTimeMap)
 }
+
+//total pay is calcuated from the map values. A list is kep to allow additional changes in the future
+fun calculatePay(
+    validatedStartTimeStr: String,
+    validatedStopTimeStr: String,
+    familyMap: Map<String, Int>,
+    validatedMap: Map<String, Int>
+): Int {
+    val payList = mutableListOf<Int>()
+
+    for ((key, value) in validatedMap) {
+        payList.add(familyMap.getValue(key))
+    }
+
+    val totalPay = payList.reduce { sum, element -> sum + element }
+    println("Your total pay is: $totalPay")
+
+    return totalPay
+
+}
+
