@@ -1,14 +1,10 @@
 import org.junit.jupiter.api.Assertions.assertEquals
-import java.lang.IllegalArgumentException
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Test
 
 
 class FamilyInfoTest {
 
-
     @Test
-
     fun `Run multiple tests`() {
         val fam1 = "A"
         val fam2 = "B"
@@ -38,16 +34,16 @@ class FamilyInfoTest {
         assertEquals(family3TimeMap, fam3Test.validateFamily(fam3))
         return
     }
-
-    @Test
-    fun `expected exception testing`() {
-        val fam4 = "D"
-        val fam4Test = FamilyInfo(fam4)
-
-        val exception = assertThrows<IllegalArgumentException>("Should throw an exception)") {
-            fam4Test.validateFamily(fam4)
-        }
-        assertEquals("Valid family value required", exception.message)
-    }
+//
+//    @Test
+//    fun `expected exception testing`() {
+//        val fam4 = "D"
+//        val fam4Test = FamilyInfo(fam4)
+//
+//        val exception = assertThrows<IllegalArgumentException>("Should throw an exception)") {
+//            fam4Test.validateFamily(fam4)
+//        }
+//        assertEquals("Valid family value required", exception.message)
+//    }
 
 }

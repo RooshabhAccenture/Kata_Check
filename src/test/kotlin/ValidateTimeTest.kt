@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.Assertions.assertEquals
+
 import java.lang.IllegalArgumentException
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Test
@@ -7,7 +8,6 @@ import org.junit.jupiter.api.Test
 class ValTimeTest {
 
     @Test
-
     fun `Simple round check`() {
         val startTime1 = Time(8, 10, "pm")
         val stopTime1 = Time(3, 33, "am")
