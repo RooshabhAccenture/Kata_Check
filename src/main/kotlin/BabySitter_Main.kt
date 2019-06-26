@@ -60,11 +60,6 @@ fun roundTime(timeMinute: Int, timeHour: Int): Int {
 //Function to validate user input times
 fun validateTime(startTime: Time, stopTime: Time): CorrectedTime {
 
-//    //**********REMOVE & move to input for function
-//    val startTime = Time(8, 10, "pm")
-//    val stopTime = Time(2, 33, "am")
-//    //***********REMOVE % move to input for function
-
 
     //Created a linkedMap with "indexing" to be used in the event Kotlin LinkedHashMap does not
     //expose the list interface when attempting to iterate through it
