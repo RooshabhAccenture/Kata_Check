@@ -13,7 +13,7 @@ data class CorrectedTime(
 )
 
 
-class FamilyInfo constructor(strFamilyValue: String) {
+class FamilyInfo {
     //Class properties act as a database, in lieu of one for this Kata
     //Dynamic creation of maps could be done by utilizing user input of time ranges, and creating
 
@@ -58,6 +58,7 @@ fun roundTime(timeMinute: Int, timeHour: Int): Int {
 }
 
 //Function to validate user input times
+@Throws(IllegalArgumentException::class)
 fun validateTime(startTime: Time, stopTime: Time): CorrectedTime {
 
 
@@ -69,7 +70,6 @@ fun validateTime(startTime: Time, stopTime: Time): CorrectedTime {
         "10pm" to 5, "11pm" to 6, "12am" to 7, "1am" to 8, "2am" to 9, "3am" to 10, "4am" to 11
     )
 
-    // println("stop time before round: ${stopTime.Hours}")
     //call function to round time
     startTime.Hours = roundTime(startTime.minutes, startTime.Hours)
     stopTime.Hours = roundTime(stopTime.minutes, stopTime.Hours)
@@ -77,13 +77,12 @@ fun validateTime(startTime: Time, stopTime: Time): CorrectedTime {
 
     //Validate start following rounding to
     if (startTime.period == "am" || (startTime.Hours < 5 && startTime.period == "pm")) {
-        println("no bueno") //update to return valid message
+        throw IllegalArgumentException("Invalid time entered.")
     }
 
     //validate time is within resaoable time frame
     if (stopTime.period == "am" && stopTime.Hours > 4) {
-        //println("${stopTime.Hours}")
-        println("no bueno")
+        throw IllegalArgumentException("Invalid end time entered.")
     }
 
 
@@ -93,23 +92,20 @@ fun validateTime(startTime: Time, stopTime: Time): CorrectedTime {
     val startTimeStr = startHours + startTime.period
     val stopTimeStr = stopHours + stopTime.period
 
-    //if start/stop exist
-    //do
-    val translatedStart = timeTranslationMap.getOrDefault(startTimeStr, 0)
-    //print(translatedStart)
 
-    val translatedStop = timeTranslationMap.getOrDefault(stopTimeStr, 0)
-    //println(translatedStop)
-
-    //else throw exception?
-
+    //Block to handle times entered are both available
+    if (!timeTranslationMap.containsKey(startTimeStr) || !timeTranslationMap.containsKey(stopTimeStr)) {
+        throw IllegalArgumentException("Invalid end time entered.")
+    }
+    val translatedStart = timeTranslationMap.get(startTimeStr)!!
+    val translatedStop = timeTranslationMap.get(stopTimeStr)!!
+    //Confirm start time occurs before stop time. Prevents babysitter from working less than 30 minutes
     val translationDiff = translatedStop - translatedStart
 
     //translation map used to confirm that the babysitter works for at least 30 minutes
     //Allows babysitter to be on call (e.g. working from 3am - 4am)
     if (translationDiff <= 0) {
-        //Throw exception etc wh
-        println("Invalid time entry")
+        throw IllegalArgumentException("Invalid end time entered. The start time should be before the end time. The time interval should be greater than 30 minutes")
     }
 
     //filtered translation map to be used in conjunction with the family pay rates per hour

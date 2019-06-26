@@ -25,9 +25,9 @@ class FamilyInfoTest {
             "10pm" to 15, "11pm" to 15, "12am" to 15, "1am" to 15, "2am" to 15, "3am" to 20, "4am" to 20
         )
 
-        val fam1Test = FamilyInfo(fam1)
-        val fam2Test = FamilyInfo(fam2)
-        val fam3Test = FamilyInfo(fam2)
+        val fam1Test = FamilyInfo()
+        val fam2Test = FamilyInfo()
+        val fam3Test = FamilyInfo()
 
         assertEquals(family1TimeMap, fam1Test.validateFamily(fam1))
         assertEquals(family2TimeMap, fam2Test.validateFamily(fam2))
